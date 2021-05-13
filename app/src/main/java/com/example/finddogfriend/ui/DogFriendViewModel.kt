@@ -1,5 +1,6 @@
 package com.example.finddogfriend.ui
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -26,17 +27,14 @@ class DogFriendViewModel:ViewModel() {
         Dog("p4", "puppy4", R.mipmap.puppy4),
     )
 
-    var detailShowing:Boolean by mutableStateOf(false)
-
-    var currentDog: Dog? by mutableStateOf(null)
-
-    fun showDetail(dog: Dog){
-        currentDog = dog
-        detailShowing = true
+    fun getCurrentDog(id: String): Dog {
+        dogs.forEach {
+            if (it.id == id) {
+                return it
+            }
+        }
+        return dogs.first()
     }
 
-    fun closeDetail() {
-        detailShowing = false
-    }
 
 }

@@ -25,32 +25,35 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.navigate
+import androidx.navigation.compose.rememberNavController
 import com.example.finddogfriend.ui.theme.GrayF1
 import com.example.finddogfriend.ui.theme.GrayF9
 import com.example.finddogfriend.R
 @Composable
-fun MainPage() {
+fun MainPage(navController: NavController) {
     Column(
         Modifier
             .fillMaxSize()
             .background(Color.White)) {
-        TopItems()
+        TopItems(navController)
     }
 }
 
 @Composable
-private fun TopItems() {
+private fun TopItems(navController: NavController) {
     Column {
         MainTitle()
         MainSearchBar()
         ClassifyRows()
         SecondTitle()
-        DogRows()
+        DogRows(navController)
     }
 }
 
 @Composable
-private fun DogRows() {
+private fun DogRows(navController: NavController) {
     val viewModel: DogFriendViewModel = viewModel()
     LazyRow {
         itemsIndexed(viewModel.dogs) { index, dog ->
@@ -65,7 +68,7 @@ private fun DogRows() {
                     .height(280.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .clickable {
-                        viewModel.showDetail(dog)
+                        navController.navigate("detail/${dog.id}")
                     }
             )
         }

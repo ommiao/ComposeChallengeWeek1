@@ -1,12 +1,13 @@
 package com.example.finddogfriend.ui
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,15 +28,13 @@ import com.example.finddogfriend.ui.theme.GrayA1
 import kotlin.math.roundToInt
 
 @Composable
-fun DogDetail() {
-    val viewModel: DogFriendViewModel = viewModel()
-    val offsetPercent = animateFloatAsState(if (viewModel.detailShowing) 0f else 1f)
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .percentOffsetY(offsetPercent.value)
-        .background(Color.White)) {
-        val currentDog = viewModel.currentDog
-        if(currentDog != null){
+fun DogDetail(string: String?) {
+    if (string != null){
+        val viewModel: DogFriendViewModel = viewModel()
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)) {
+            val currentDog by mutableStateOf(viewModel.getCurrentDog(string))
             DetailTop(currentDog)
             DetailBottom(currentDog)
         }
