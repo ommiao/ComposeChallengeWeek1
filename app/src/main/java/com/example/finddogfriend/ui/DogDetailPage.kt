@@ -3,12 +3,16 @@ package com.example.finddogfriend.ui
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
@@ -32,13 +36,25 @@ fun DogDetail() {
     val offsetPercent = animateFloatAsState(if (viewModel.detailShowing) 0f else 1f)
     Box(modifier = Modifier
         .fillMaxSize()
-        .percentOffsetY(offsetPercent.value)
+        .percentOffsetX(offsetPercent.value)
+        .interruptClickEvent()
         .background(Color.White)) {
-        val currentDog = viewModel.currentDog
-        if(currentDog != null){
-            DetailTop(currentDog)
-            DetailBottom(currentDog)
+            val currentDog = viewModel.currentDog
+            if(currentDog != null){
+                DetailTop(currentDog)
+                DetailBottom(currentDog)
+            }
         }
+}
+
+fun Modifier.interruptClickEvent():Modifier = composed {
+    clickable(
+        interactionSource = remember {
+            MutableInteractionSource()
+        },
+        indication = null
+    ) {
+
     }
 }
 
@@ -103,7 +119,9 @@ private fun DetailBottom(currentDog: Dog) {
                 .padding(start = 32.dp)
                 .weight(1f))
             Icon(painterResource(id = R.drawable.ic_right), contentDescription = "go",
-            Modifier.padding(horizontal = 20.dp).size(18.dp))
+                Modifier
+                    .padding(horizontal = 20.dp)
+                    .size(18.dp))
         }
     }
 }
@@ -124,5 +142,13 @@ fun Modifier.percentOffsetY(percent: Float): Modifier = this.layout { measurable
     layout(placeable.width, placeable.height) {
         val offset = (percent * placeable.height).roundToInt()
         placeable.placeRelative(0, offset)
+    }
+}
+
+fun Modifier.percentOffsetX(percent: Float): Modifier = this.layout { measurable, constraints ->
+    val placeable = measurable.measure(constraints)
+    layout(placeable.width, placeable.height) {
+        val offset = (percent * placeable.width).roundToInt()
+        placeable.placeRelative(offset, 0)
     }
 }

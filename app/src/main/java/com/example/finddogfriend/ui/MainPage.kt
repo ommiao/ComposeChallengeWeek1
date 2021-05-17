@@ -2,9 +2,7 @@ package com.example.finddogfriend.ui
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.TweenSpec
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -34,13 +32,6 @@ fun MainPage() {
         Modifier
             .fillMaxSize()
             .background(Color.White)) {
-        TopItems()
-    }
-}
-
-@Composable
-private fun TopItems() {
-    Column {
         MainTitle()
         MainSearchBar()
         ClassifyRows()
@@ -87,7 +78,10 @@ private fun ClassifyRows() {
     val viewModel: DogFriendViewModel = viewModel()
     LazyRow(Modifier.padding(top = 20.dp)) {
         itemsIndexed(viewModel.classifies) { index, classify ->
-            val bgColor = animateColorAsState(if (classify.selected) Color.Black else Color.White, TweenSpec(500))
+            val bgColor = animateColorAsState(
+                targetValue = if (classify.selected) Color.Black else Color.White,
+                animationSpec = TweenSpec(500)
+            )
             Box(
                 Modifier
                     .padding(start = if (index == 0) 36.dp else 0.dp)
